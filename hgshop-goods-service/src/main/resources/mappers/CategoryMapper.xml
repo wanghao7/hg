@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wanghao.hgshop.dao.CategoryMapper">
+
+<!-- id
+parent_id
+name
+path
+ -->
+	<resultMap type="Category" id="catMapper">
+		<id column="id" property="id"/>
+		<result column="parent_id" property="parentId"/>
+		<collection property="children" column="id" select="listChildren"></collection>
+	</resultMap>
+	
+	<select id="listChildren" resultMap="catMapper">
+		select * from hg_category where parent_id=#{value}
+	</select>
+	
+	<select id="tree" resultMap="catMapper">
+		select * from hg_category where parent_id=0
+	</select>
+
+	<insert id="add">
+		insert into hg_category(name,parent_id) values(#{name},#{parentId})
+	</insert>
+	
+	<delete id="delete">
+		delete from hg_category where id=#{value}
+	</delete>
+	
+	<select id="getCategory" resultType="com.wanghao.hgshop.pojo.Category" >
+			select id,name,path from hg_category where id = #{id}
+	</select>
+	
+	<update id="update">
+		update hg_category set name = #{name} where id=#{id}
+	</update>
+	
+<!-- 	品牌列表 -->
+	<select id="listBrand" resultType="com.wanghao.hgshop.pojo.Brand" >
+		SELECT id,name,first_char firstChar ,deleted_flag deletedFlag  FROM hg_brand  
+		<where>
+			and deleted_flag =  0
+			<if test="firstChar!=null and firstChar!='' ">
+				and name like concat ('%',#{firstChar},'%')
+			</if>
+		</where>
+		ORDER BY id
+	</select>
+	
+	<insert id="addBrand">
+		insert into hg_brand(name,first_char,deleted_flag) values(#{name},#{firstChar},0)
+	</insert>
+	
+	<select id="getBrand" resultType="com.wanghao.hgshop.pojo.Brand" >
+			SELECT id,name,first_char firstChar ,deleted_flag deletedFlag  FROM hg_brand  where id=#{id}
+	</select>
+	
+	<update id="del">
+		update hg_brand set deleted_flag=1 where id in
+		<foreach collection="array" open="(" separator="," close=")" item="id" >
+			#{id}
+		</foreach>
+	</update>
+</mapper>

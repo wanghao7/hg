@@ -48,7 +48,7 @@
 	<!--8 扫描mapper -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<!-- basePackage :mapper接口所在的包 -->
-		<property name="basePackage" value="com.wanghao.hgshop.dao" />
+		<property name="basePackage" value="com.wanghao.hgshop.dao"  />
 	</bean>
 
 </beans>

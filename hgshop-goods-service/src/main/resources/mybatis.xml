@@ -10,9 +10,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 </settings>
 
 	<!-- 别名配置 -->
-<!-- 	<typeAliases> -->
-<!-- 		<package name="com.wanghao.hgshop.pojo" /> -->
-<!-- 	</typeAliases> -->
+	<typeAliases>
+		<package name="com.wanghao.hgshop.pojo" />
+	</typeAliases>
 
 	<!-- 配置分页助手拦截器 -->
 	<plugins>

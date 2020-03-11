@@ -5,15 +5,15 @@
 	xmlns:elasticsearch="http://www.springframework.org/schema/data/elasticsearch"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://dubbo.apache.org/schema/dubbo 
-       http://dubbo.apache.org/schema/dubbo/dubbo.xsd
+       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
-       http://www.springframework.org/schema/data/elasticsearch 
-	   http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch-1.0.xsd">
-
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/data/elasticsearch  http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch-1.0.xsd">
+       
 	
   
 	<!--5、 配置jdbc事务管理器 -->
@@ -21,6 +21,10 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+	
+<!-- 	读取配置文件 -->
+	<context:component-scan
+		base-package="com.wanghao.hgshop.config" />
 
 	<!--配置事务 transaction-manager:表示关联的事务管理器是谁 -->
 	<tx:advice transaction-manager="transactionManager"

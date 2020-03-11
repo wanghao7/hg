@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wanghao.hgshop.dao.SpecMapper">
+
+<!-- 	查找规格表 -->
+	<select id="list" resultMap="specMapper" >
+		select * from hg_spec
+		<where>
+			<if test="name!='' and name!=null">
+				and spec_name like concat('%',#{name},'%')
+			</if>
+		</where>
+		ORDER BY id
+	</select>
+<!-- 	实体类里面有List集合 用collection -->
+	<resultMap type="com.wanghao.hgshop.pojo.Spec" id="specMapper">
+		<id column="id" property="id" />
+		<result column="spec_name" property="specName" />
+<!-- 		通过已经查到的id进行子查询 -->
+		<collection property="options" column="id" select="seleceOptions" >		</collection>
+	</resultMap>
+	
+	<select id="seleceOptions" resultType="com.wanghao.hgshop.pojo.SpecOption" >
+		SELECT id,option_name optionName,spec_id specId,orders
+		FROM hg_spec_option where spec_id=#{id}
+	</select>
+	
+	
+	<!-- int addSpec(Spec spec); -->
+	<insert id="addSpec" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO hg_spec(spec_name) values(#{specName})
+	</insert>
+
+	<!-- int addOption(SpecOption specOption); -->
+	<insert id="addOption">
+		INSERT INTO hg_spec_option(option_name,spec_id,orders) 
+		   VALUES(#{optionName},#{specId},#{orders})
+	</insert>
+	
+<!-- 	删除子表 -->
+	<delete id="deleteSpecOtionsBatch" >
+		delete from hg_spec_option where id in
+		<foreach collection="array" open="(" separator="," close=")" item="specid"  >
+			#{specid}
+		</foreach>
+	</delete>
+	
+	<!-- Spec get(int id); -->
+	<select id="get"  resultMap="specMapper">
+   		select * from hg_spec  WHERE id=#{value}
+	</select>
+	
+	<delete id="deleteSpecBatch">
+		delete from hg_spec where id in
+		<foreach collection="array" open="(" separator="," close=")" item="specid"  >
+			#{specid}
+		</foreach>
+	</delete>
+	
+	<select id="listAll" resultType="Spec">
+   		select id, spec_name as specName from hg_spec ORDER BY spec_name
+   	</select>
+	
+	
+</mapper>

@@ -57,6 +57,26 @@ public class SpecController {
 		return add>0?"success":"false";
 	}
 	/**
+	 * 修改
+	 * @param request
+	 * @param spec
+	 * @return
+	 */
+	@RequestMapping("update")
+	@ResponseBody
+	public String update(HttpServletRequest request,Spec spec) {
+		System.out.println("spec" + spec);
+		//System.out.println();
+		spec.getOptions().removeIf(x->{return x.getOptionName()==null;});
+		System.out.println("spec 处理后：" + spec);
+		//调用服务
+		int add = specService.update(spec);  
+		//return add>0?"success":"false";
+		return add>0?"success":"false";
+	}
+	
+	
+	/**
 	 * 修改回显 和 添加sku的前置条件
 	 * @param request
 	 * @param id

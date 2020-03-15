@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wanghao.hgshop.dao.UserMapper">
+
+
+	<insert id="add" useGeneratedKeys="true" keyColumn="uid" keyProperty="uid">
+		insert into hg_user(username,password,name,email,telephone,birthday,sex,state)
+	 	 VALUES(#{username},#{password},#{name},#{email},#{telephone},#{birthday},#{sex},0)
+	</insert>
+	
+	<select id="getById" resultType="com.wanghao.hgshop.pojo.User" >
+		select hg_user.* from hg_user where uid =#{uid}
+	</select>
+	
+	<select id="login" resultType="com.wanghao.hgshop.pojo.User" >
+		select hg_user.* from hg_user where username=#{username} and password =#{password}
+	</select>
+</mapper>

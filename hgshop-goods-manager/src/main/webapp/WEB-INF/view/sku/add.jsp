@@ -26,12 +26,34 @@
 		        placeholder="卖点">
 		    </div>
 		  </div>
-		  
-		  <div class="form-row">
+		   <div class="form-row">
 		    <div class="col">
 		       <label>价格</label>	
 		        <input type="text" name="price" class="form-control" 
 		        placeholder="价格">
+		    </div>
+		  </div>
+		  
+		  <div class="form-row">
+		    <div class="col">
+		       <label>市场价格</label>	
+		        <input type="text" name="marketPrice" class="form-control" 
+		        placeholder="市场价格">
+		    </div>
+		  </div>
+		  <div class="form-row">
+		    <div class="col">
+		       <label>成本价格</label>	
+		        <input type="text" name="costPrice" class="form-control" 
+		        placeholder="成本价格">
+		    </div>
+		  </div>
+		  
+		  <div class="form-row">
+		     <div class="col">
+		       <label>库存</label>	
+		        <input type="text" name="stockCount" class="form-control" 
+		        placeholder="库存">
 		    </div>
 		  </div>
 		  
@@ -63,6 +85,7 @@
 		  <div id="speclList">
 			  
 		  </div>
+		  
 		  <div>
 		  	 <button type="button" class="btn btn-danger" onclick="addSpec()">增加属性</button>
 		  </div>
@@ -73,6 +96,14 @@
 		      <input type="file" name="file" class="form-control-file" id="exampleFormControlFile1">
 		    </div>
 		  </div>
+		  
+		   <div class="form-row">
+		    <div class="col">
+		       <label>商品图片</label>	
+		      <input type="file" name="imageFile" class="form-control-file" id="exampleFormControlFile1">
+		    </div>
+		  </div>
+		  
 		  
   	  	<div class="form-row">
 		    <div class="col">

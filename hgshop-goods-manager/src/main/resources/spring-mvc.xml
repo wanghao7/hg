@@ -10,7 +10,7 @@
 
 	<!-- 扫描器 -->
 	<context:component-scan
-		base-package="com.wanghao.hgshop.controller" />
+		base-package="com.wanghao.hgshop.controller,com.bawei.hgshop.listener" />
 	<!-- 视图解析图 -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -24,7 +24,7 @@
 	
 <!-- 	读取配置文件 -->
 	<context:component-scan
-		base-package="com.wanghao.hgshop.config" />
+		base-package="com.wanghao.hgshop.config,com.wanghao.hgshop.utils,com.wanghao.hgshop.listen" />
 
 	<!--配置事务 transaction-manager:表示关联的事务管理器是谁 -->
 	<tx:advice transaction-manager="transactionManager"

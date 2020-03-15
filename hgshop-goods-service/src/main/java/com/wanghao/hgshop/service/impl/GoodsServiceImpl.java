@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,12 +14,13 @@ import com.wanghao.hgshop.dao.SpuMapper;
 import com.wanghao.hgshop.pojo.Brand;
 import com.wanghao.hgshop.pojo.Category;
 import com.wanghao.hgshop.pojo.Sku;
-import com.wanghao.hgshop.pojo.Spec;
 import com.wanghao.hgshop.pojo.SpecOption;
 import com.wanghao.hgshop.pojo.Spu;
+import com.wanghao.hgshop.pojo.SpuEsVo;
 import com.wanghao.hgshop.pojo.SpuVo;
 import com.wanghao.hgshop.service.GoodsService;
-@Service
+import com.wanghao.hgshop.utils.ElSearchUtil;
+@Service(interfaceClass=GoodsService.class)
 public class GoodsServiceImpl implements GoodsService {
 
 	@Autowired
@@ -29,6 +31,13 @@ public class GoodsServiceImpl implements GoodsService {
 	
 	@Autowired
 	SkuMapper skuMapper;
+	
+	// 工具类
+	@Autowired
+	ElSearchUtil<SpuEsVo> elSearchUtils;
+	
+	@Autowired
+	KafkaTemplate<String, String> kafkaTemplate;
 	
 	@Override
 	public int addBrand(Brand brand) {
@@ -113,11 +122,27 @@ public class GoodsServiceImpl implements GoodsService {
 		
 		return new PageInfo<Spu>(spuMapper.list(vo));
 	}
+	@Override
+	public PageInfo<Spu> listSpu2(int page, SpuVo vo) {
+		
+		return new PageInfo<Spu>(spuMapper.list(vo));
+	}
 
 
 	@Override
 	public int addSpu(Spu spu) {
 		// TODO Auto-generated method stub
+		int cnt =  spuMapper.add(spu);
+		//kafaTemplate.send("MyAddSpu", "spuId", cnt+"");
+		
+		// 将该数据收集到搜搜引擎当中
+		Spu newSpu = spuMapper.findById(spu.getId());
+		SpuEsVo spuEsVo = new SpuEsVo(newSpu);
+		System.out.println(" >>>>>>>>>>> spuEsVo is " + spuEsVo);
+		elSearchUtils.saveObject(spu.getId().toString(), spuEsVo);
+		
+		// 使用kafak 去发送消息  把商品id 发送到主题MyAddSpu 上。
+		kafkaTemplate.send("MyAddSpu", "addspu",spu.getId().toString() );
 		return spuMapper.add(spu);
 	}
 
@@ -162,6 +187,13 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 		
 		return cnt;
+	}
+
+
+	@Override
+	public List<Sku> listSkuBySpu(int spuId) {
+		// TODO Auto-generated method stub
+		return skuMapper.listBySpu(spuId);
 	}
 
 	

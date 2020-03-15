@@ -61,5 +61,14 @@
    		select id, spec_name as specName from hg_spec ORDER BY spec_name
    	</select>
 	
-	
+	<!-- int updateSpec(Spec spec); -->
+	<update id="updateSpec">
+		update hg_spec set spec_name=#{specName}
+		where id=#{id}
+	</update>
+
+	<!-- int deleteSpecOtions(int id); -->
+	<delete id="deleteSpecOtions">
+		delete from hg_spec_option WHERE spec_id = #{value}
+	</delete>
 </mapper>

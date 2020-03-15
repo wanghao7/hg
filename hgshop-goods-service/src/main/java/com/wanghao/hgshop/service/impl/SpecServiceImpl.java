@@ -54,7 +54,19 @@ public class SpecServiceImpl implements SpecService {
 	@Override
 	public int update(Spec spec) {
 		// TODO Auto-generated method stub
-		return 0;
+		// 去子表中删除
+		specMapper.deleteSpecOtions(spec.getId());
+		// 修改主表
+		specMapper.updateSpec(spec);	 
+		// 插入子表
+		List<SpecOption> options = spec.getOptions();
+		for (SpecOption specOption : options) {
+			// 设置主表的id
+			specOption.setSpecId(spec.getId());
+			specMapper.addOption(specOption);
+		}
+		
+		return 1;
 	}
 
 	@Override

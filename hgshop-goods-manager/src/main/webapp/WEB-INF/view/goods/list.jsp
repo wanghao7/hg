@@ -4,7 +4,6 @@
 
 	<div>
 		<button type="button" class="btn btn-warning" onclick="toAdd()">添加</button>
-		<button type="button" class="btn btn-danger">批量删除</button>
 	</div>
 <table class="table">
 	<tr>
@@ -27,8 +26,6 @@
 			<td>${spu.category.name}</td>
 			<td> <img width="100px" height="100px" src="/pic/${spu.smallPic}"></td>
 			<td><button type="button" class="btn btn-success">详情</button>
-				<button type="button" class="btn btn-danger">删除</button>
-				<button type="button" class="btn btn-warning">修改</button>
 				<button type="button" class="btn btn-warning" onclick="addSku(${spu.id})">添加sku</button>
 				<a target="_blank"  href="/goods/down?filename=${spu.smallPic}" >下载小图</a>
 			</td>

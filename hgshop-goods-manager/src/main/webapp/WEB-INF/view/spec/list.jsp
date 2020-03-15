@@ -15,7 +15,7 @@
 		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" onclick="plsc()"  >批量删除</button>&nbsp;&nbsp;
     </div>
 </div>
-
+<!-- 添加的model -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -46,6 +46,46 @@
   </div>
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdropUpdate" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">添加规格</h5>
+         <button type="button" onclick="addProp2('#updatespec')"> 添加属性</button>
+         
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        	
+      </div>
+      <div class="modal-body"> 
+        	<form id="updatespec">
+        		 <input type="hidden" name="id" id="upId">
+        		 <div class="form-group">
+    				<label for="specName">规格名称</label>
+    				<input type="text" class="form-control" name="specName" id="upspecName" aria-describedby="specNamelHelp">
+    				<small id="specNamelHelp" class="form-text text-muted">请输入规格名称</small>
+  				</div>
+  				<div class="form-group form-group-proper">
+    				<label for="inputAddress">属性值</label>
+    				<input type="text" name="options[0].optionName" class="form-control" id="inputAddress" placeholder="1234 Main St">
+    				<button onclick="$(this).parent().remove()">删除</buttonn>
+  				</div>
+  				
+    			
+        	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="commitUpdateSpec()">提交</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 	<table class="table">
 		<tr> 
 			<th><input type="checkbox" id="id"  >id
@@ -68,7 +108,7 @@
 					</c:forEach>
 				</td>
 				<td>
-					<button type="button" class="btn btn-warning">修改</button>
+					<button type="button" onclick="openUpdateSpec(${b.id})" class="btn btn-warning">修改</button>
 					<button type="button"  onclick="dele(${b.id})" class="btn btn-info">删除</button>
 				</td>
 			</tr>
@@ -82,6 +122,82 @@
 		
 	</table>
 <script type="text/javascript">
+
+	var addindex2=1;
+	//fomId 标志给那个form 添加属性
+	function addProp2(fomId){
+			$(fomId).append('<div class="form-group form-group-proper">'+
+					'<label for="inputAddress">属性值</label>'+
+					'<input type="text" name="options['+addindex2+'].optionName" class="form-control" id="inputAddress" placeholder="1234 Main St">'+
+					'<button onclick="$(this).parent().remove()">删除</button>'+
+					'</div>')
+					
+					
+		addindex2++;
+	} 
+
+	// 提交修改
+	function commitUpdateSpec(){
+		
+		//addspec
+		var formData = new FormData($("#updatespec")[0]);
+		$.ajax({url:"/spec/update",
+			 // dataType:"json",
+			  data:formData,
+			  // 让jQuery 不要再提交数据之前进行处理
+			  processData : false,
+			  // 提交的数据不能加消息头
+			  contentType : false,
+			  // 提交的方式 
+			  type:"post",
+			  // 成功后的回调函数
+			  success:function(data){
+				 if(data=="success"){
+					 alert("数据提交成功");
+					 $('#staticBackdropUpdate').modal('hide');
+					 
+				 }else{
+					 alert("数据保存失败")
+				 }
+				 
+			  }
+			  })
+		
+	}
+	//弹出修改的窗口
+	function openUpdateSpec(id){
+		
+		//清空数据
+		$(".form-group-proper").each(function(){
+			$(this).remove();
+		})
+		addindex=0;
+		$("#upspecName").val("")
+		
+		
+		$.post("/spec/getSpec",{id:id},function(data){
+			//规格的id
+			$("#upId").val(data.id)
+			$("#upspecName").val(data.specName)
+			// 添加规格的选项
+			addindex=0;
+			for(var i=0;i<data.options.length;i++){
+				var option=data.options[i];
+				$("#updatespec").append('<div class="form-group form-group-proper">'+
+	    				'<label for="inputAddress">属性值</label>'+
+	    				'<input type="hidden" name="options['+addindex+'].id" value="'+option.id+'">' +
+	    				'<input type="text" name="options['+addindex+'].optionName" value="'+option.optionName+'"class="form-control" id="inputAddress" >'+
+	    				'<button onclick="$(this).parent().remove()">删除</button>'+
+	    				'</div>')
+	    		addindex++;
+			}
+			
+		});
+		
+		$("#staticBackdropUpdate").modal('show')
+	}
+
+
 
 	function goPage(page){
 		var name =$("[name=name]").val();
@@ -132,7 +248,13 @@
 		$("#div").load("/spec/list?name="+nam );
 	}
 	
-	//模态框隐藏之后调用此函数
+	//修改模态框隐藏之后调用此函数
+// 	$('#exampleModalUpdate').on('hidden.bs.modal', function (e) {
+// 		  // do something...
+// 		resetAddFrom();//调用resetAddFrom函数
+// 	})
+	
+	//添加模态框隐藏之后调用此函数
 	$('#exampleModal').on('hidden.bs.modal', function (e) {
 		  // do something...
 		resetAddFrom();//调用resetAddFrom函数

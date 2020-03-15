@@ -41,9 +41,18 @@
 	</select>
 	
 	<insert id="addSku" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-		insert into hg_sku(spu_id,title,sell_point,image) values(#{spuId},#{title},#{sellPoint},#{image})
+		insert into hg_sku(spu_id,title,sell_point,price,market_price,
+	       cost_price,stock_count,cart_thumbnail,image,barcode,
+	       status,create_time,update_time) 
+		 values(#{spuId},#{title},#{sellPoint},#{price},#{marketPrice},
+	       #{costPrice},#{stockCount},#{cartThumbnail},#{image},#{barcode},
+	       1,now(),now())
 	</insert>
 
+<!-- 	listBySpu -->
+	<select id="listBySpu" resultMap="skuMapper" >
+		SELECT *, id as detailId FROM hg_sku WHERE spu_id=${value} ORDER BY id DESC
+	</select>
 
 <!-- 	
 	// 添加sku
@@ -55,5 +64,6 @@
 	</insert>
 <!-- 	//添加对应sku的属性值
 	int addSkuSpec(SpecOption so); -->
+	
 	
 </mapper>

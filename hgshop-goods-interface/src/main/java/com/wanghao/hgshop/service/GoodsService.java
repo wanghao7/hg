@@ -48,6 +48,7 @@ public interface GoodsService {
 	
 	//spu
 	PageInfo<Spu>  listSpu(int page,SpuVo vo);
+	PageInfo<Spu>  listSpu2(int page,SpuVo vo);
 	int addSpu(Spu spu);
 	List<Brand> getAllBrands( );
 	//sku
@@ -55,4 +56,5 @@ public interface GoodsService {
 	Sku getSku(int id);
 	Spu getSpu(int spuId);
 	int addSku(Sku sku);
+	List<Sku> listSkuBySpu(int spuId);
 }

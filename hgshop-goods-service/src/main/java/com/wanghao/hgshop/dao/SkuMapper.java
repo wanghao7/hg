@@ -18,4 +18,11 @@ public interface SkuMapper {
 	//添加对应sku的属性值
 	int addSkuSpec(@Param("skuId") int skuId,@Param("so") SpecOption so);
 
+	/**
+	 * 用户点击图片  根据spu获取
+	 * @param spuId
+	 * @return
+	 */
+	List<Sku> listBySpu(int spuId);
+
 }
